@@ -1,0 +1,89 @@
+Qual é o comando SQL que retorna o nome do hóspede e o tipo de quarto que ele reservou?
+
+SELECT c.nome_cliente, q.descricao
+FROM clientes c
+JOIN reservas r ON c.id_cliente = r.id_cliente
+JOIN reservas_quartos rq ON r.id_reserva = rq.id_reserva
+JOIN quartos q ON rq.id_quarto = q.id_quarto;
+
+Qual é o comando SQL para criar uma STORED PROCEDURE que atualize o status de um determinado quarto no Sistema de um hotel?
+
+DELIMITER //
+CREATE PROCEDURE atualizar_status_quarto(IN id_quarto_param INT, IN novo_status VARCHAR(50))
+BEGIN
+  UPDATE quartos
+  SET status = novo_status
+  WHERE id_quarto = id_quarto_param;
+END;
+//
+DELIMITER ;
+
+Qual é o comando SQL para criar uma STORED PROCEDURE que exiba o nome e o número de telefone de um determinado hóspede no Sistema de um hotel?
+
+DELIMITER //
+CREATE PROCEDURE exibir_info_hospede(IN id_cliente_param INT)
+BEGIN
+  SELECT nome_cliente, telefone
+  FROM clientes
+  WHERE id_cliente = id_cliente_param;
+END;
+//
+DELIMITER ;
+
+Qual é o comando SQL para selecionar a média de gastos dos hóspedes em um determinado período de tempo no Sistema de um hotel?
+
+SELECT AVG(q.diaria)
+FROM reservas r
+JOIN reservas_quartos rq ON r.id_reserva = rq.id_reserva
+JOIN quartos q ON rq.id_quarto = q.id_quarto
+WHERE r.data_inicio >= '2023-06-01' AND r.data_fim <= '2023-06-30';
+
+Qual é o comando SQL que retorna a média de gastos com diárias dos hóspedes que ficaram no hotel por mais de 4 dias?
+
+SELECT AVG(q.diaria)
+FROM reservas r
+JOIN reservas_quartos rq ON r.id_reserva = rq.id_reserva
+JOIN quartos q ON rq.id_quarto = q.id_quarto
+WHERE DATEDIFF(r.data_fim, r.data_inicio) = 4;
+
+Qual é o comando SQL para atualizar o preço da diária do quarto com id_quarto \= 2 para R$ 250,00 no Sistema de um hotel?
+
+UPDATE quartos
+SET diaria = 250.00
+WHERE id_quarto = 2;
+
+Qual é o comando SQL para atualizar a data de check-out da reserva com id_reserva \= 1 para "2023-09-03" no Sistema de um hotel?
+
+UPDATE reservas
+SET data_fim = '2023-09-03'
+WHERE id_reserva = 1;
+
+Qual é o comando SQL para atualizar o nome do hóspede com id_hospede \= 1 para "Maria da Silva" no Sistema de um hotel?
+
+UPDATE clientes
+SET nome_cliente = 'Maria da Silva'
+WHERE id_cliente = 1;
+
+Qual é o comando SQL que retorna o nome do hóspede que fez a reserva com a diária mais cara?
+
+SELECT c.nome_cliente
+FROM clientes c
+JOIN reservas r ON c.id_cliente = r.id_cliente
+JOIN reservas_quartos rq ON r.id_reserva = rq.id_reserva
+JOIN quartos q ON rq.id_quarto = q.id_quarto
+ORDER BY q.diaria DESC
+LIMIT 1;
+
+Qual é o comando SQL para selecionar todos os hóspedes que realizaram check-in no Sistema de um hotel?
+
+SELECT c.nome_cliente
+FROM clientes c
+JOIN reservas r ON c.id_cliente = r.id_cliente
+JOIN reservas_quartos rq ON r.id_reserva = rq.id_reserva;
+
+Qual é o comando SQL para selecionar o nome e o número de telefone dos hóspedes que já fizeram o check-in no Sistema de um hotel?
+
+SELECT c.nome_cliente, c.telefone
+FROM clientes c
+JOIN reservas r ON c.id_cliente = r.id_cliente
+JOIN reservas_quartos rq ON r.id_reserva = rq.id_reserva;
